@@ -1,5 +1,6 @@
 package eu.excitementproject.eop.alignmentedas.p1eda.sandbox;
 
+import java.io.FileNotFoundException;
 import java.util.Vector;
 
 import org.apache.uima.jcas.JCas;
@@ -55,7 +56,7 @@ public class WithVO extends P1EDATemplate {
 //			aligner3 = new WordNetENLinker(null); 
 			aligner4 = new VerbOceanENLinker("../core/src/main/resources/VerbOcean/verbocean.unrefined.2004-05-20.txt"); 
 		}
-		catch (AlignmentComponentException ae)
+		catch (AlignmentComponentException | FileNotFoundException ae)
 		{
 			throw new EDAException("Initializing Alignment components failed: " + ae.getMessage(), ae); 
 		}

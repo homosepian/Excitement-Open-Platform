@@ -247,6 +247,46 @@ public class FileUtils {
 	}
 
 	/**
+	 * Use this utility function to load files that you know to exist on the classpath. If you want to create a file
+	 * for a non-existing path, use {@link #loadOrCreateResource(String)} instead.
+	 * <br>
+	 * This function searches a resource on the entire classpath and loads it into a File object. It throws a
+	 * {@link FileNotFoundException} if the resource doesn't exist.
+	 *
+	 * @param filepath a path to a file. This can be a path relative to a module's home directory, i.e it can
+	 *                 start with `./src/main/resources/`
+	 * @return the resource as a File object, if the file exists
+	 * @throws FileNotFoundException if the file does not exist on the classpath
+	 */
+	public static File loadResource(String filepath) throws FileNotFoundException {
+		// paths in the configuration files are relative to the module's home dir, i.e start with ./
+		// remove the `./src/main/resources/` prefix for the ClassLoader to check all paths
+		String runtimePath = filepath.replaceFirst("\\./src/main/resources/", "");
+		URL url = FileUtils.class.getClassLoader().getResource(runtimePath);
+		if (url == null) {
+			throw new FileNotFoundException("");
+		}
+		return org.apache.commons.io.FileUtils.toFile(url).getAbsoluteFile();
+    }
+
+	/**
+	 * Use this utility function to load a file if it exists on the classpath, or create it if it doesn't exist.
+	 * If you want to enforce the existence of the file (e.g if you're loading a configuration file), use
+	 * {@link #loadResource(String)} instead.
+	 *
+	 * @param filepath a path to a file. This can be a path relative to a module's home directory, i.e it can
+	 *                 start with `./src/main/resources/`
+	 * @return the resource as a File object
+	 */
+	public static File loadOrCreateResource(String filepath) {
+		try {
+			return loadResource(filepath);
+		} catch (FileNotFoundException e) {
+			return new File(filepath);
+		}
+	}
+
+	/**
 	 * Get the package name of the object's class 
 	 * @param o 
 	 * @return

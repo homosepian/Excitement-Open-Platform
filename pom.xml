@@ -149,6 +149,21 @@
 
 		</profiles>
 
+	<dependencies>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.py4j</groupId>
+			<artifactId>py4j</artifactId>
+			<version>0.10.6</version>
+			<!-- scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/py4j-0.10.6.jar</systemPath -->
+		</dependency>
+	</dependencies>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -501,6 +516,11 @@
 			<name>DKPro repository</name>
 			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases</url>
 		</repository>
+		<!--repository>
+			<id>py4j</id>
+			<name>Py4j repository</name>
+			<url>https://mvnrepository.com/artifact/net.sf.py4j/py4j</url>
+		</repository-->
 	</repositories>
 
 	<pluginRepositories>

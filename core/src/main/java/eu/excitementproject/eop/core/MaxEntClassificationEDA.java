@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import eu.excitementproject.eop.common.utilities.file.FileUtils;
 import opennlp.maxent.DoubleStringPair;
 import opennlp.maxent.GIS;
 import opennlp.maxent.io.SuffixSensitiveGISModelWriter;
@@ -328,33 +329,33 @@ public class MaxEntClassificationEDA implements
 					+ " No EDA section.");
 		}
 		modelFile = EDA.getString("modelFile");
-		if (isTrain) {
-			File file = new File(modelFile);
-			if (file.exists()) {
-				// throw new ConfigurationException(
-				// "The model file exists! Please specify another file name.");
-				String oldModelFile = modelFile + "_old";
-				File oldFile = new File(oldModelFile);
-				if (oldFile.exists())
-					oldFile.delete();
-				file.renameTo(oldFile);
+		try {
+			if (isTrain) {
+				File file = FileUtils.loadResource(modelFile);
+				if (file.exists()) {
+					// throw new ConfigurationException(
+					// "The model file exists! Please specify another file name.");
+					String oldModelFile = modelFile + "_old";
+					File oldFile = FileUtils.loadOrCreateResource(oldModelFile);
+					if (oldFile.exists())
+						oldFile.delete();
+					file.renameTo(oldFile);
+				} else {
+					logger.info("The trained model will be stored in "
+							+ file.getAbsolutePath());
+				}
 			} else {
-				logger.info("The trained model will be stored in "
-						+ file.getAbsolutePath());
-			}
-		} else {
-			try {
-				File file = new File(modelFile);
+				File file = FileUtils.loadResource(modelFile);
 				if (!file.exists()) {
 					throw new ConfigurationException(
 							"The model specified in the configuration does NOT exist! Please give the correct file path.");
 				} else {
 					logger.info("Reading model from " + file.getAbsolutePath());
 				}
-				model = new GenericModelReader(new File(modelFile)).getModel();
-			} catch (IOException e) {
-				throw new ConfigurationException(e.getMessage());
+				model = new GenericModelReader(file).getModel();
 			}
+		} catch (IOException e) {
+			throw new ConfigurationException(e.getMessage());
 		}
 	}
 
@@ -496,8 +497,8 @@ public class MaxEntClassificationEDA implements
 		}
 		// double sigma = 1.0;
 
-		File outputFile = new File(modelFile);
 		try {
+			File outputFile = FileUtils.loadResource(modelFile); //new File(modelFile);
 			// GIS.SMOOTHING_OBSERVATION = SMOOTHING_OBSERVATION;
 			model = GIS.trainModel(max_iteration,
 					new OnePassRealValueDataIndexer(readInXmiFiles(trainDIR),
@@ -507,6 +508,7 @@ public class MaxEntClassificationEDA implements
 					(AbstractModel) model, outputFile);
 			writer.persist();
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new ConfigurationException(e.getMessage());
 		}
 	}

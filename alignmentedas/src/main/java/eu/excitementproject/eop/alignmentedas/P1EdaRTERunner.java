@@ -45,7 +45,8 @@ public class P1EdaRTERunner
     	{	
     		// Prepare LAP and EDA (here, both for English) and eval on RTE3 (again, EN)  
     		LAP_ImplBase lapEN = new TreeTaggerEN(); 
-    		P1EDATemplate p1edaEN = new SimpleWordCoverageEN("../core/src/main/resources/ontologies/EnglishWordNet-dict","../core/src/main/resources/VerbOcean/verbocean.unrefined.2004-05-20.txt"); // Put your (configured, instance) P1EDA here... 
+    		P1EDATemplate p1edaEN = new SimpleWordCoverageEN("ontologies/EnglishWordNet-dict",
+					"VerbOcean/verbocean.unrefined.2004-05-20.txt"); // Put your (configured, instance) P1EDA here...
     		evaluateOnRTE3EN(lapEN, p1edaEN, false);  // set final argument true, if lap has not been changed from last call. (to reuse saved XMI files) 
     		
     		// use evaluateOnRTE3DE for German 

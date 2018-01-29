@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import eu.excitementproject.eop.common.utilities.file.FileUtils;
 import opennlp.tools.chunker.ChunkerME;
 import opennlp.tools.chunker.ChunkerModel;
 import opennlp.tools.util.Span;
@@ -89,7 +90,7 @@ public class BagOfChunkVectorAligner extends VectorAligner {
 
 		NameValueTable comp = config.getSection("BagOfChunkVectorScoring");
 
-		wordVectors = WordVectorSerializer.loadTxtVectors(new File(comp
+		wordVectors = WordVectorSerializer.loadTxtVectors(FileUtils.loadResource(comp
 				.getString("chunkVecModel")));
 	}
 
@@ -120,11 +121,13 @@ public class BagOfChunkVectorAligner extends VectorAligner {
 				voTh = Double.parseDouble(comp.getString("verbOceanThreshold"));
 			}
 
-			File voFile = new File(voPath);
-			if (!voFile.exists()) {
-				throw new ConfigurationException("cannot find VerbOcean at: "
-						+ voPath);
-			}
+            File voFile;
+            try {
+                voFile = FileUtils.loadResource(voPath);
+            } catch (FileNotFoundException e) {
+                throw new ConfigurationException("cannot find VerbOcean at: "
+                        + voPath);
+            }
 
 			Set<RelationType> voRelSet = new HashSet<RelationType>();
 			// If H verb is stronger than, opposite of, or happens before T
@@ -178,11 +181,13 @@ public class BagOfChunkVectorAligner extends VectorAligner {
 				wnPath = comp.getString("wordNetFilesPath");
 			}
 
-			File wnFile = new File(wnPath);
-			if (!wnFile.exists()) {
-				throw new ConfigurationException("cannot find WordNet at: "
-						+ wnPath);
-			}
+            File wnFile;
+            try {
+                wnFile = FileUtils.loadResource(wnPath);
+            } catch (FileNotFoundException e) {
+                throw new ConfigurationException("cannot find WordNet at: "
+                        + wnPath);
+            }
 
 			Set<WordNetRelation> wnRelSet = new HashSet<WordNetRelation>();
 			wnRelSet.add(WordNetRelation.ANTONYM);

@@ -1,5 +1,6 @@
 package eu.excitementproject.eop.alignmentedas.p1eda.instances;
 
+import java.io.FileNotFoundException;
 import java.util.Vector;
 
 import org.apache.uima.jcas.JCas;
@@ -64,7 +65,7 @@ public class SimpleWordCoverageEN extends P1EDATemplate {
 			aligner3 = new WordNetENLinker(wordNetDirPath);  
 			aligner4 = new VerbOceanENLinker(verbOceanFilePath); 
 		}
-		catch (AlignmentComponentException ae)
+		catch (AlignmentComponentException | FileNotFoundException ae)
 		{
 			throw new EDAException("Initializing Alignment components failed: " + ae.getMessage(), ae); 
 		}

@@ -3,6 +3,7 @@ package eu.excitementproject.eop.alignmentedas.p1eda.insepctor;
 import java.io.File;
 import java.util.Vector;
 
+import eu.excitementproject.eop.common.utilities.file.FileUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -45,8 +46,9 @@ public class InspectorUsageExample {
 		try {
 			// prepare lap and eda
 			theLap = new TreeTaggerEN(); // TreeTagger pipeline 
-			theEda = new SimpleWordCoverageEN("../core/src/main/resources/ontologies/EnglishWordNet-dict", "../core/src/main/resources/VerbOcean/verbocean.unrefined.2004-05-20.txt");
-			theEda.initialize(new File("./src/test/resources/swc_en.cmodel"));  // init a pre-trained model from RTE3 English train 
+			theEda = new SimpleWordCoverageEN("ontologies/EnglishWordNet-dict",
+					"VerbOcean/verbocean.unrefined.2004-05-20.txt");
+			theEda.initialize(FileUtils.loadResource("swc_en.cmodel"));  // init a pre-trained model from RTE3 English train
 		}
 		catch(Exception e)
 		{

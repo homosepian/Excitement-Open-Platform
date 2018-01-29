@@ -1,10 +1,12 @@
 package eu.excitementproject.eop.core.component.alignment.lexicallink.wrapped;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import eu.excitementproject.eop.common.utilities.file.FileUtils;
 import org.apache.uima.jcas.JCas;
 
 import eu.excitementproject.eop.common.component.alignment.AlignmentComponent;
@@ -46,10 +48,9 @@ public class VerbOceanENLinker implements AlignmentComponent {
 	 * 
 	 * @param verbOceanPath needs to point to txt file path of VerbOcean. (e.g. verbocean.unrefined.2004-05-20.txt)
 	 */
-	public VerbOceanENLinker(String verbOceanPath) throws AlignmentComponentException
-	{
+	public VerbOceanENLinker(String verbOceanPath) throws AlignmentComponentException, FileNotFoundException {
 		//this(new File(verbOceanDefaultPath), defaultRelations); 
-		this(new File(verbOceanPath), defaultRelations); 
+		this(FileUtils.loadResource(verbOceanPath), defaultRelations);
 	}
 	
 	

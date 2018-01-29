@@ -1,10 +1,12 @@
 package eu.excitementproject.eop.core.component.alignment.lexicallink.wrapped;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import eu.excitementproject.eop.common.utilities.file.FileUtils;
 import org.apache.uima.jcas.JCas;
 
 import eu.excitementproject.eop.common.component.alignment.AlignmentComponent;
@@ -62,16 +64,18 @@ public class WordNetENLinker implements AlignmentComponent {
 	 */
 	public WordNetENLinker(String wordNetPath, Set<WordNetRelation> entailingRelationSet, int maxPhraseLen) throws AlignmentComponentException {
 		try {
-			LexicalResource<WordnetRuleInfo> wordNet = new WordnetLexicalResource(new File(wordNetPath), true, true, entailingRelationSet, 2); 
+			LexicalResource<WordnetRuleInfo> wordNet = new WordnetLexicalResource(FileUtils.loadResource(wordNetPath), true, true, entailingRelationSet, 2);
 			worker = new LexicalAlignerFromLexicalResource(wordNet, true, maxPhraseLen, null, null, null); 		
 		} 
 		catch (LexicalResourceException e)
 		{
-			throw new AlignmentComponentException ("failed to initialize WordNet LexicalResource: " + e.getMessage()); 
+			throw new AlignmentComponentException ("failed to initialize WordNet LexicalResource: " + e.getMessage(), e);
 		} 
 		catch (AlignmentComponentException ae)
 		{
-			throw new AlignmentComponentException ("failed to initialize lexical aligner: " + ae.getMessage()); 
+			throw new AlignmentComponentException ("failed to initialize lexical aligner: " + ae.getMessage(), ae);
+		} catch (FileNotFoundException e) {
+			throw new AlignmentComponentException ("failed to load WordNet file: " + e.getMessage(), e);
 		}
 
 	}

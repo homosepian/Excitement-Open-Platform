@@ -129,7 +129,7 @@ public class ImplCommonConfig extends CommonConfig
 						
 						//reading key values pairs
 						for (int j = 0; j < propertyList.getLength(); j++) {
-							 
+							// TODO: correct file path here?
 							Node propertyNode = propertyList.item(j);
 							Element propertyElement = (Element) propertyNode;
 							String propertyAttributeValue = propertyElement.getAttribute("name");

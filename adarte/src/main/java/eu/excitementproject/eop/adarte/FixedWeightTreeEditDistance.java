@@ -11,6 +11,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import eu.excitementproject.eop.common.utilities.file.FileUtils;
 import org.apache.uima.jcas.JCas;
 
 import treedist.EditScore;
@@ -213,7 +214,7 @@ public class FixedWeightTreeEditDistance implements DistanceCalculation {
 					
 					Class<?> componentClass = Class.forName(componentName);
 					Constructor<?> componentClassConstructor = componentClass.getConstructor(CommonConfig.class);
-					File configFile = new File(configurationFile);
+					File configFile = FileUtils.loadResource(configurationFile);
 					ImplCommonConfig commonConfig = new ImplCommonConfig(configFile);
 					this.aligner = (LexicalAligner) componentClassConstructor.newInstance(commonConfig);
 					

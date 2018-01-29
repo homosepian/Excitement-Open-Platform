@@ -2,6 +2,9 @@ package eu.excitementproject.eop.core.component.alignment.lexicallink.wrapped;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
+
+import eu.excitementproject.eop.common.utilities.file.FileUtils;
 import org.apache.uima.jcas.JCas;
 import eu.excitementproject.eop.common.component.alignment.AlignmentComponent;
 import eu.excitementproject.eop.common.component.alignment.AlignmentComponentException;
@@ -18,20 +21,18 @@ import eu.excitementproject.eop.core.component.alignment.lexicallink.LexicalAlig
 @Deprecated 
 public class WordNetENLinker_old implements AlignmentComponent {
 	/**
-	 * WARN: Broken code; wordNetPath doesn't work. --- update either commonconfig
-	 * or LexicalAligner. Thus, it will rely on fixed XML file path --- which won't work
-	 * within a Jar (used as a library)
+	 * WARN: Broken code?
 	 *
 	 * @param wordNetPath
 	 * @throws AlignmentComponentException
 	 */
 	public WordNetENLinker_old (String wordNetPath) throws AlignmentComponentException {
 		this.wordNetPath = wordNetPath;
-		File configFile = new File("../core/src/main/resources/configuration-file/lexlinkers/WordNetENLinker.xml");
 		try {
+            File configFile = FileUtils.loadResource("configuration-file/lexlinkers/WordNetENLinker.xml");
 			config = new ImplCommonConfig(configFile);
 		}
-		catch (ConfigurationException ce)
+		catch (ConfigurationException | FileNotFoundException ce)
 		{
 			throw new AlignmentComponentException("Reading base configuration file failed!", ce);
 		}
